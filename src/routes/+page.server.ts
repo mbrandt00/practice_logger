@@ -1,12 +1,12 @@
-import { togglRequest } from '$lib/server/toggl-client';
+import { addProjectInfoToEntry, togglRequest } from '$lib/server/toggl-client';
+import type { Entry, Project } from '$lib/types/togglObjects';
 
 export async function load() {
-	const timeEntries = await togglRequest('/me/time_entries');
+	const timeEntries: Entry[] = await togglRequest('/me/time_entries');
 	for (let i = 0; i < timeEntries.length; i++) {
-		const workspaceId = timeEntries[i].workspace_id;
-		const projectId = timeEntries[i].project_id;
-		const projectData = await togglRequest(`/workspaces/${workspaceId}/projects/${projectId}`);
-		timeEntries[i].project = projectData;
+		const entryWithProject: Project = await addProjectInfoToEntry(timeEntries[i])
+
+		timeEntries[i].project = entryWithProject;
 	}
 	return {
 		timeEntries: timeEntries

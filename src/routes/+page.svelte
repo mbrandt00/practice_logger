@@ -1,6 +1,6 @@
 <script lang="ts">
+	import type { Entry } from '$lib/types/togglObjects.js';
 	export let data;
-	import type { Entry } from '$lib/types/togglEntry.js';
 	const timeEntries: Entry[] = data.timeEntries;
 </script>
 
