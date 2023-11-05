@@ -8,4 +8,5 @@
 {#each timeEntries as entry}
 	{entry.at}
 	{entry.project_id}
+	{entry.project?.name}
 {/each}

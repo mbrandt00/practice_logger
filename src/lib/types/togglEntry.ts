@@ -1,4 +1,5 @@
 // https://developers.track.toggl.com/docs/api/time_entries
+import type { Project } from "./togglProject"
 export interface Entry {
   id: number
   workspace_id: number
@@ -16,4 +17,5 @@ export interface Entry {
   user_id: number
   pid: number
   server_deleted_at: string | null
+  project: Project | null
 }
