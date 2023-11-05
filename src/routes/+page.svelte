@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Entry } from '$lib/types/togglObjects.js';
-	import { formatSecondsToHoursAndMinutes } from '$lib/utils/stringFormatter.js';
+	import { formatDateString, formatSecondsToHoursAndMinutes } from '$lib/utils/stringFormatter.js';
 	export let data;
 	const timeEntries: Entry[] = data.timeEntries;
 </script>
@@ -11,6 +11,7 @@
 		<thead>
 			<tr>
 				<th />
+				<th>Date</th>
 				<th>Piece</th>
 				<th>Composer</th>
 				<th>Time Practiced</th>
@@ -28,6 +29,13 @@
 					<td>
 						<div class="flex items-center">
 							<div>
+								<div class="font-bold">{formatDateString(entry.at)}</div>
+							</div>
+						</div>
+					</td>
+					<td>
+						<div class="flex items-center">
+							<div>
 								<div class="font-bold">{entry.project?.name}</div>
 								<div class="text-sm opacity-50">{entry?.task?.name ?? ''}</div>
 							</div>
@@ -36,7 +44,7 @@
 					<td>
 						{entry?.client?.name ?? ''}
 					</td>
-					<td>{formatSecondsToHoursAndMinutes(entry?.project?.actual_seconds) ?? ''}</td>
+					<td> {formatSecondsToHoursAndMinutes(entry.duration)}</td>
 					<th>
 						<button class="btn btn-ghost btn-xs">details</button>
 					</th>
