@@ -19,6 +19,15 @@ export async function togglRequest(endpoint: string) {
 	return await response.json();
 }
 
+export async function getTimeEntriesWithProjects() {
+	const timeEntries: Entry[] = await togglRequest('/me/time_entries');
+	for (let i = 0; i < timeEntries.length; i++) {
+		const entryWithProject: Project = await addProjectInfoToEntry(timeEntries[i])
+		timeEntries[i].project = entryWithProject;
+	}
+	return timeEntries
+}
+
 
 export async function addProjectInfoToEntry(entry: Entry) {
 	const projectInfo: Project = await togglRequest(`/workspaces/${entry.workspace_id}/projects/${entry.project_id}`);
