@@ -22,14 +22,15 @@ export async function togglRequest(endpoint: string) {
 export async function getTimeEntriesWithProjects() {
 	const timeEntries: Entry[] = await togglRequest('/me/time_entries');
 	for (let i = 0; i < timeEntries.length; i++) {
-		const entryWithProject: Project = await addProjectInfoToEntry(timeEntries[i])
+		const entryWithProject: Project = await addProjectInfoToEntry(timeEntries[i]);
 		timeEntries[i].project = entryWithProject;
 	}
-	return timeEntries
+	return timeEntries;
 }
 
-
 export async function addProjectInfoToEntry(entry: Entry) {
-	const projectInfo: Project = await togglRequest(`/workspaces/${entry.workspace_id}/projects/${entry.project_id}`);
-	return projectInfo
+	const projectInfo: Project = await togglRequest(
+		`/workspaces/${entry.workspace_id}/projects/${entry.project_id}`
+	);
+	return projectInfo;
 }
