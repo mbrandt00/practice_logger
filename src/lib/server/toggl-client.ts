@@ -1,5 +1,5 @@
 import { TOGGL_API_TOKEN } from '$env/static/private';
-import type { Entry, Project } from '$lib/types/togglObjects';
+import type { Client, Entry, Project, Task } from '$lib/types/togglObjects';
 export async function togglRequest(endpoint: string) {
 	const url = `https://api.track.toggl.com/api/v9${endpoint}`;
 
@@ -19,11 +19,15 @@ export async function togglRequest(endpoint: string) {
 	return await response.json();
 }
 
-export async function getTimeEntriesWithProjects() {
+export async function getTimeEntriesWithProjectsAndTaskInfo() {
 	const timeEntries: Entry[] = await togglRequest('/me/time_entries');
 	for (let i = 0; i < timeEntries.length; i++) {
-		const entryWithProject: Project = await addProjectInfoToEntry(timeEntries[i]);
-		timeEntries[i].project = entryWithProject;
+		const projectInfo: Project = await addProjectInfoToEntry(timeEntries[i]);
+		const taskInfo: Task = await addTaskInfoToEntry(timeEntries[i]);
+		const clientInfo: Client = await addClientInfoToProject(projectInfo);
+		timeEntries[i].project = projectInfo;
+		timeEntries[i].client = clientInfo;
+		timeEntries[i].task = taskInfo;
 	}
 	return timeEntries;
 }
@@ -32,5 +36,21 @@ export async function addProjectInfoToEntry(entry: Entry) {
 	const projectInfo: Project = await togglRequest(
 		`/workspaces/${entry.workspace_id}/projects/${entry.project_id}`
 	);
+
 	return projectInfo;
+}
+export async function addTaskInfoToEntry(entry: Entry) {
+	if (entry.task_id) {
+		return await togglRequest(
+			`/workspaces/${entry.workspace_id}/projects/${entry.project_id}/tasks/${entry.task_id}`
+		);
+	}
+	return;
+}
+export async function addClientInfoToProject(project: Project) {
+	console.log(project.actual_seconds);
+	if (project.client_id) {
+		return await togglRequest(`/workspaces/${project.workspace_id}/clients/${project.client_id}`);
+	}
+	return;
 }

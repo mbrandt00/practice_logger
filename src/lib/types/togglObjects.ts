@@ -17,12 +17,14 @@ export interface Entry {
 	pid: number;
 	server_deleted_at: string | null;
 	project?: Project;
+	task?: Task;
+	client?: Client;
 }
 
 export interface Project {
 	active: boolean;
 	actual_hours: number | null;
-	actual_seconds: number | null;
+	actual_seconds: number;
 	at: string;
 	billable: boolean | null;
 	client_id: number | null;
@@ -40,4 +42,24 @@ export interface Project {
 	start_date: string;
 	template: boolean | null;
 	workspace_id: number;
+}
+
+export interface Task {
+	active: boolean;
+	at: string;
+	estimated_seconds: number | null;
+	id: number;
+	name: string;
+	project_id: number;
+	recurring: boolean;
+	server_deleted_at: string | null;
+	user_id: number | null;
+	workspace_id: number;
+}
+
+export interface Client {
+	name: string;
+	at: string;
+	server_deleted_at: string | null;
+	id: number;
 }

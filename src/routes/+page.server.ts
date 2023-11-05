@@ -1,7 +1,7 @@
-import { getTimeEntriesWithProjects } from '$lib/server/toggl-client';
+import { getTimeEntriesWithProjectsAndTaskInfo } from '$lib/server/toggl-client';
 
 export async function load() {
 	return {
-		timeEntries: getTimeEntriesWithProjects()
+		timeEntries: getTimeEntriesWithProjectsAndTaskInfo()
 	};
 }
