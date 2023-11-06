@@ -3,6 +3,31 @@
 	import { formatDateString, formatSecondsToHoursAndMinutes } from '$lib/utils/stringFormatter.js';
 	export let data;
 	const timeEntries: Entry[] = data.timeEntries;
+	async function handleCheckboxChange(event: any) {
+		const isChecked = event.target.checked;
+		if (isChecked) {
+			const response = await fetch('/createEntry', {
+				method: 'POST',
+				body: JSON.stringify({
+					workspace_id: parseInt(data.userData.default_workspace_id),
+					billable: false,
+					created_with: 'practice_logger',
+					duration: -1,
+					project_id: parseInt(event.target.dataset.project),
+					start: new Date(),
+					task_id: parseInt(event.target.dataset.task)
+				}),
+				headers: {
+					'content-type': 'application/json'
+				}
+			});
+			if (response.ok) {
+				console.log('Server-side code executed successfully');
+			} else {
+				console.error('Server-side code execution failed');
+			}
+		}
+	}
 </script>
 
 <h3>Recent Entries</h3>
@@ -23,7 +48,14 @@
 				<tr>
 					<th>
 						<label>
-							<input type="checkbox" class="checkbox" />
+							<input
+								type="checkbox"
+								class="checkbox"
+								on:change={handleCheckboxChange}
+								data-entry={entry.id}
+								data-project={entry.project_id}
+								data-task={entry.task_id}
+							/>
 						</label>
 					</th>
 					<td>

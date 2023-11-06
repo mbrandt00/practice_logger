@@ -63,3 +63,16 @@ export interface Client {
 	server_deleted_at: string | null;
 	id: number;
 }
+
+export interface PostTimeEntryInput {
+	billable?: boolean;
+	created_with: string;
+	description?: string;
+	duration: number;
+	project_id?: number;
+	start: string;
+	stop?: string;
+	task_id?: number;
+	user_id?: number; // defaults to current user
+	workspace_id: number;
+}
